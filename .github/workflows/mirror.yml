@@ -17,7 +17,7 @@ jobs:
     name: Mirror R-forge
     runs-on: ubuntu-20.04
     steps:
-      - name: Check for new app installations
+      - name: Find and update R-forge repos
         uses: r-universe-org/rforge-mirror@master
         env:
           GITHUB_PAT: ${{ secrets.RFORGE_PAT }}

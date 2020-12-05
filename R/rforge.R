@@ -12,6 +12,7 @@ rforge_mirror <- function(this_week = TRUE){
   if(!(user$login %in% c('rforge', 'r-forge')))
     stop("No valid PAT found for r-forge user")
   projects <- rforge_find_projects(this_week = this_week)
+  cat("Found active projects:", projects)
   projects <- setdiff(projects, skiplist)
   lapply(projects, mirror_one_project)
   invisible()
