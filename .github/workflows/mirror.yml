@@ -17,5 +17,7 @@ jobs:
     steps:
       - name: Find and update R-forge repos
         uses: r-universe-org/rforge-mirror@master
+        with:
+          action: ${{ github.event.inputs.action }}
         env:
           GITHUB_PAT: ${{ secrets.RFORGE_PAT }}
