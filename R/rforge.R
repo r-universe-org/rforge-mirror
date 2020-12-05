@@ -61,9 +61,11 @@ create_gh_repo <- function(project){
 clone_and_push <- function(project){
   pwd <- getwd()
   on.exit(setwd(pwd))
-  sys::exec_wait("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), project))
+  res <- sys::exec_wait("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s/trunk", project), project))
+  if(res != 0)
+    stop(paste("git svn clone failed for:", project))
   setwd(project)
-  gert::git_remote_add('origin', sprintf('https://github.com/rforge/%s.git', project))
+  gert::git_remote_add(paste0('https://github.com/rforge/', project))
   gert::git_push('origin', force = TRUE, mirror = TRUE)
   setwd("..")
   unlink(project, recursive = TRUE)
