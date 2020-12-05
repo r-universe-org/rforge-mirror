@@ -12,7 +12,7 @@ rforge_mirror <- function(this_week = TRUE){
   if(!isTRUE(user$login %in% c('rforge', 'r-forge')))
     stop("No valid PAT found for r-forge user")
   projects <- rforge_find_projects(this_week = this_week)
-  cat("Found active projects:", projects)
+  cat("Found active projects:", projects, "\n")
   projects <- setdiff(projects, skiplist)
   lapply(projects, mirror_one_project)
   invisible()
@@ -84,7 +84,7 @@ rforge_cleanup_repos <- function(){
   repos <- rforge_list_repos()
   status <- rforge_project_status(repos)
   dead <- repos[which(status == 404)]
-  cat("Found dead repositories:", dead)
+  cat("Found dead repositories:", dead, "\n")
   lapply(dead, function(project){
     endpoint <- paste0("/repos/rforge/", project)
     gh::gh(endpoint, .method = 'DELETE')
