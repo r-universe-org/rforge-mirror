@@ -85,6 +85,7 @@ rforge_cleanup_repos <- function(){
   lapply(dead, function(project){
     endpoint <- paste0("/repos/rforge/", project)
     gh::gh(endpoint, .method = 'DELETE')
+    cat("DELETED", project, "\n")
   })
 }
 

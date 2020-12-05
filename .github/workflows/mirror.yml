@@ -1,0 +1,23 @@
+on:
+  schedule:
+    - cron:  '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      full:
+        description: Perform a full mirror of all repos
+        default: false
+      cleanup:
+        description: Delete dead r-forge repos
+        default: false
+
+name: Mirror R-forge
+
+jobs:
+  update:
+    name: Mirror R-forge
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check for new app installations
+        uses: r-universe-org/rforge-mirror@master
+        env:
+          GITHUB_PAT: ${{ secrets.RFORGE_PAT }}
