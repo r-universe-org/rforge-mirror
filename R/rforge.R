@@ -14,9 +14,7 @@ rforge_mirror <- function(this_week = TRUE){
   projects <- rforge_find_projects(this_week = this_week)
   cat("Found active projects:", projects, "\n")
   projects <- setdiff(projects, skiplist)
-  sapply(projects, function(x){
-    tryCatch(mirror_one_project(x), error = function(e){e$message})
-  })
+  sapply(projects, mirror_one_project)
 }
 
 #' @export
@@ -37,9 +35,11 @@ find_projects <- function(page){
 }
 
 mirror_one_project <- function(project){
-  create_gh_repo(project)
-  clone_and_push(project)
-  'OK'
+  tryCatch({
+    create_gh_repo(project)
+    clone_and_push(project)
+    'OK'
+  }, error = function(e){paste("ERROR:", e$message)})
 }
 
 create_gh_repo <- function(project){
