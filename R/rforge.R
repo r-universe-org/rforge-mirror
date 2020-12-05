@@ -9,7 +9,7 @@
 #' the past week. Set this to FALSE to mirror all repos we can find.
 rforge_mirror <- function(this_week = TRUE){
   user <- gh::gh_whoami()
-  if(!(user$login %in% c('rforge', 'r-forge')))
+  if(!isTRUE(user$login %in% c('rforge', 'r-forge')))
     stop("No valid PAT found for r-forge user")
   projects <- rforge_find_projects(this_week = this_week)
   cat("Found active projects:", projects)
@@ -61,7 +61,7 @@ create_gh_repo <- function(project){
 clone_and_push <- function(project){
   pwd <- getwd()
   on.exit(setwd(pwd))
-  res <- sys::exec_wait("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s/trunk", project), project))
+  res <- sys::exec_wait("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), project))
   if(res != 0)
     stop(paste("git svn clone failed for:", project))
   setwd(project)
