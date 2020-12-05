@@ -1,15 +1,11 @@
 name: 'Mirroring R-Forge to GitHub'
 description: 'Mirror R-Forge repos to GitHub'
 inputs:
-  full:
-    description: Perform a full mirror of all repos
-    default: false
-  cleanup:
-    description: Delete dead r-forge repos
-    default: false
+  action:
+    description: One of quick, full or cleanup
+    default: quick
 runs:
   using: 'docker'
   image: 'docker://runiverse/rforge-mirror'
   args:
-    - ${{ inputs.full }}
-    - ${{ inputs.cleanup }}
+    - ${{ inputs.action }}

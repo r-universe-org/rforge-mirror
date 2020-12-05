@@ -3,14 +3,12 @@ on:
     - cron:  '0 8 * * *'
   workflow_dispatch:
     inputs:
-      full:
-        description: Perform a full mirror of all repos
-        default: false
-      cleanup:
-        description: Delete dead r-forge repos
-        default: false
+      action:
+        description: Which action to perform
+        required: true
+        default: quick
 
-name: Mirror R-forge
+name: Mirroring R-forge
 
 jobs:
   update:
