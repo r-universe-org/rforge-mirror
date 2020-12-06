@@ -1,6 +1,6 @@
 #' R-forge mirror tools
 #'
-#' Mirrors SVN repositories to \url{https://github.com/rforge}
+#' Mirrors SVN repositories to \url{https://github.com/r-forge}
 #'
 #' @export
 #' @name rforge-mirror
@@ -43,7 +43,7 @@ mirror_one_project <- function(project){
 }
 
 create_gh_repo <- function(project){
-  endpoint <- paste0('/repos/rforge/', project)
+  endpoint <- paste0('/repos/r-forge/', project)
   tryCatch({
     res <- gh::gh(endpoint)
     cat(sprintf('Found existing repo "%s"\n', res$full_name))
@@ -72,14 +72,14 @@ clone_and_push <- function(project){
   if(res != 0)
     stop(paste("git svn clone failed for:", project))
   setwd(git_dir)
-  gert::git_remote_add(paste0('https://github.com/rforge/', project))
+  gert::git_remote_add(paste0('https://github.com/r-forge/', project))
   gert::git_push('origin', force = TRUE, mirror = TRUE)
 }
 
 #' @rdname rforge
 #' @export
 rforge_list_repos <- function(){
-  repos <- gh::gh('/users/rforge/repos', .limit = 1e5)
+  repos <- gh::gh('/users/r-forge/repos', .limit = 1e5)
   vapply(repos, function(x){x$name}, character(1))
 }
 
@@ -91,7 +91,7 @@ rforge_cleanup_repos <- function(){
   dead <- repos[which(status == 404)]
   cat("Found dead repositories:", dead, "\n")
   lapply(dead, function(project){
-    endpoint <- paste0("/repos/rforge/", project)
+    endpoint <- paste0("/repos/r-forge/", project)
     gh::gh(endpoint, .method = 'DELETE')
     cat("DELETED", project, "\n")
   })
