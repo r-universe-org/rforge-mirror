@@ -63,7 +63,7 @@ create_gh_repo <- function(project){
 clone_and_push <- function(project){
   pwd <- getwd()
   on.exit(setwd(pwd))
-  res <- sys::exec_wait("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), project))
+  res <- system2("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), project))
   if(res != 0)
     stop(paste("git svn clone failed for:", project))
   setwd(project)
