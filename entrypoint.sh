@@ -2,6 +2,10 @@
 set -e
 ACTION="${1}"
 
+if [ -z "$ACTION" ]; then
+ACTION="quick"
+fi
+
 case $ACTION in
   quick)
     echo "Running quick R-forge mirror"
