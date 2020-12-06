@@ -67,7 +67,8 @@ clone_and_push <- function(project){
     setwd(old_dir)
     unlink(git_dir, recursive = TRUE)
   })
-  res <- system2("git", c("svn", "clone", sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), git_dir))
+  res <- system2("git", c("svn", "clone", "--log-window-size=10000",
+    sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), git_dir))
   if(res != 0)
     stop(paste("git svn clone failed for:", project))
   setwd(git_dir)
