@@ -49,11 +49,12 @@ create_gh_repo <- function(project){
     cat(sprintf('Found existing repo "%s"\n', res$full_name))
   }, http_error_404 = function(e){
     cat(sprintf('Did not find repo "%s". Creating new repo...\n', project))
-    res <- gh::gh('/user/repos', .method = 'POST',
+    res <- gh::gh('/orgs/r-forge/repos', .method = 'POST',
            name = project,
            has_issues = FALSE,
            has_wiki = FALSE,
            has_downloads = FALSE,
+           has_projects = FALSE,
            homepage = paste0("https://r-forge.r-project.org/projects/", project),
            description = sprintf("Read-only mirror of \"%s\" from r-forge SVN.", project))
     cat(sprintf('Created new repo "%s"\n', res$full_name))
