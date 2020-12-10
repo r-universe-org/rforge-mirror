@@ -27,6 +27,29 @@ rforge_find_projects <- function(this_week = TRUE){
   sort(basename(unlist(projects)))
 }
 
+#' @export
+#' @rdname rforge
+#' @name project name of the project (usually package)
+rforge_get_revision <- function(project){
+  url <- sprintf('https://r-forge.r-project.org/scm/viewvc.php?root=%s&view=rev', project)
+  doc <- xml2::read_html(url)
+  node <- xml2::xml_find_all(doc, "//h1[starts-with(.,'Revision')]")
+  if(length(node) != 1)
+    stop("Failed to find H1 header with Revision number")
+  sub("Revision ", "", xml_text(node))
+}
+
+project_need_update <- function(project){
+  rev <- rforge_get_revision(project)
+  cat(sprintf("SVN revision for '%s' is %s\n", project, rev))
+  endpoint <- sprintf('/repos/r-forge/%s/commits/HEAD', project)
+  message <- tryCatch(gh::gh(endpoint)$commit$message, error = function(e){""})
+  svn_id <- utils::tail(strsplit(message, '\n')[[1]], 1)
+  cat(sprintf("Latest '%s' commit on GitHub mirror: %s\n", project, svn_id))
+  pattern <- paste0(project, '@', rev)
+  !isTRUE(grepl(pattern, message))
+}
+
 find_projects <- function(page){
   main <- xml2::read_html(page)
   links <- rvest::html_nodes(main, 'a[href^="https://r-forge.r-project.org/projects/"]')
@@ -37,7 +60,8 @@ find_projects <- function(page){
 mirror_one_project <- function(project){
   tryCatch({
     create_gh_repo(project)
-    clone_and_push(project)
+    if(project_need_update(project))
+      clone_and_push(project)
     'OK'
   }, error = function(e){paste("ERROR:", e$message)})
 }
