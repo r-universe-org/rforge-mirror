@@ -67,9 +67,14 @@ find_projects <- function(page){
 mirror_one_project <- function(project){
   tryCatch({
     create_gh_repo(project)
-    if(project_need_update(project))
+    if(project_need_update(project)){
+      cat(sprintf("Starting full mirror for: %s\n", project))
       clone_and_push(project)
-    'OK'
+      'DONE'
+    } else {
+      cat(sprintf("Mirror is up-to-date: %s\n", project))
+      'SKIPPED'
+    }
   }, error = function(e){paste("ERROR:", e$message)})
 }
 
