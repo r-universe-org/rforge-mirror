@@ -31,6 +31,13 @@ rforge_find_projects <- function(this_week = TRUE){
 #' @rdname rforge
 #' @name project name of the project (usually package)
 rforge_get_revision <- function(project){
+  out <- sys::exec_internal('svn', c('info', paste0('svn://svn.r-forge.r-project.org/svnroot/', project)))
+  df <- as.data.frame(read.dcf(rawConnection(out$stdout)))
+  df$Revision
+}
+
+#NB: no longer need this, now that we have 'svn info' above
+rforge_get_revision_fallback <- function(project){
   url <- sprintf('https://r-forge.r-project.org/scm/viewvc.php?root=%s&view=rev', project)
   doc <- xml2::read_html(url)
   node <- xml2::xml_find_all(doc, "//h1[starts-with(.,'Revision')]")
@@ -45,7 +52,7 @@ project_need_update <- function(project){
   endpoint <- sprintf('/repos/r-forge/%s/commits/HEAD', project)
   message <- tryCatch(gh::gh(endpoint)$commit$message, error = function(e){""})
   svn_id <- utils::tail(strsplit(message, '\n')[[1]], 1)
-  cat(sprintf("Latest '%s' commit on GitHub mirror: %s\n", project, svn_id))
+  cat(sprintf("GitHub '%s' %s\n", project, svn_id))
   pattern <- paste0(project, '@', rev)
   !isTRUE(grepl(pattern, message))
 }
