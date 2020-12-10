@@ -32,7 +32,9 @@ rforge_find_projects <- function(this_week = TRUE){
 #' @name project name of the project (usually package)
 rforge_get_revision <- function(project){
   out <- sys::exec_internal('svn', c('info', paste0('svn://svn.r-forge.r-project.org/svnroot/', project)))
-  df <- as.data.frame(read.dcf(rawConnection(out$stdout)))
+  con <- rawConnection(out$stdout)
+  on.exit(close(con))
+  df <- as.data.frame(read.dcf(con))
   df$Revision
 }
 
