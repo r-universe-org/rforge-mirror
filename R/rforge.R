@@ -163,4 +163,4 @@ skiplist <-
     "open-tfdea", "optbiomarker", "patchwork", "pmoments", "polyploid",
     "ptauxpc", "rftestproject12", "r-survey", "seqinr", "sprint",
     "teatime", "toxcast", "trajectory-sim", "treevo", "tuner", "waveslim",
-    "wavetiling", "hyperspec", "partykit")
+    "wavetiling", "hyperspec", "partykit", "a2a", "dptee", "fntd", "gecon")
