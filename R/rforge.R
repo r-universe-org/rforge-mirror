@@ -129,7 +129,8 @@ rforge_cleanup_repos <- function(){
   status <- rforge_project_status(repos)
   dead <- repos[which(status == 404)]
   cat("Found dead repositories:", dead, "\n")
-  lapply(dead, function(project){
+  skipped <- intersect(repos, skiplist)
+  lapply(c(dead, skipped), function(project){
     endpoint <- paste0("/repos/r-forge/", project)
     gh::gh(endpoint, .method = 'DELETE')
     cat("DELETED", project, "\n")
