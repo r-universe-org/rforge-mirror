@@ -1,7 +1,7 @@
 Package: rforgemirror
 Type: Package
 Title: R-forge Mirror Tools
-Version: 0.1.0
+Version: 1.0
 Authors@R: person("Jeroen", "Ooms", ,"jeroen@berkeley.edu", 
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4035-0289"))
 Description: Mirrors SVN repositories to https://github.com/rforge.
