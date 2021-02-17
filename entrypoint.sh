@@ -20,8 +20,8 @@ case $ACTION in
     Rscript -e "rforgemirror::rforge_cleanup_repos()"
     ;;
   *)
-    echo "Unknown action: $ACTION"
-    exit 1
+    echo "Mirroring package: $ACTION"
+    Rscript -e "rforgemirror:::mirror_one_project('$ACTION')"
     ;;
 esac
 echo "Action complete!"

@@ -2,7 +2,7 @@ name: 'Mirroring R-Forge to GitHub'
 description: 'Mirror R-Forge repos to GitHub'
 inputs:
   action:
-    description: One of quick, full or cleanup
+    description: One of quick, full or cleanup, or a package name
     default: quick
 runs:
   using: 'docker'
