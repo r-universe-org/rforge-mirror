@@ -12,6 +12,9 @@ rforge_mirror <- function(this_week = TRUE){
   if(!isTRUE(user$login %in% c('rforge', 'r-forge')))
     stop("No valid PAT found for r-forge user")
   projects <- rforge_find_projects(this_week = this_week)
+  if(isFALSE(this_week)){
+    projects <- unique(c(projects, find_all_mirrors()))
+  }
   cat("Found active projects:", projects, "\n")
   projects <- setdiff(projects, skiplist)
   sapply(projects, mirror_one_project)
@@ -25,6 +28,11 @@ rforge_find_projects <- function(this_week = TRUE){
     url <- paste0(url, '?type=week')
   projects <- find_projects(url)
   sort(basename(unlist(projects)))
+}
+
+find_all_mirrors <- function(){
+  res <- gh::gh('/orgs/r-forge/repos', .limit = 10000)
+  vapply(res, '[[', character(1), 'name')
 }
 
 #' @export
