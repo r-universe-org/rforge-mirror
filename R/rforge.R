@@ -14,6 +14,9 @@ rforge_mirror <- function(this_week = TRUE){
   projects <- rforge_find_projects(this_week = this_week)
   if(isFALSE(this_week)){
     projects <- unique(c(projects, find_all_mirrors()))
+  } else {
+    cranpkgs <- jsonlite::fromJSON('https://raw.githubusercontent.com/r-universe-org/cran-to-git/master/r-forge.json')$package
+    projects <- unique(c(cranpkgs, projects))
   }
   cat("Found active projects:", projects, "\n")
   projects <- setdiff(projects, skiplist)
