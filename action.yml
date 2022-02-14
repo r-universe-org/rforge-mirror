@@ -5,7 +5,7 @@ inputs:
     description: One of quick, full or cleanup, or a package name
     default: quick
 runs:
-  using: 'docker'
-  image: 'docker://runiverse/rforge-mirror'
+  using: docker
+  image: docker://ghcr.io/r-universe-org/rforge-mirror
   args:
     - ${{ inputs.action }}
