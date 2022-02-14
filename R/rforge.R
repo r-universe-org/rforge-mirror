@@ -19,8 +19,12 @@ rforge_mirror <- function(this_week = TRUE){
     projects <- unique(c(cranpkgs, projects))
   }
   cat("Found active projects:", projects, "\n")
-  projects <- setdiff(projects, skiplist)
+  projects <- randomize(setdiff(projects, skiplist))
   sapply(projects, mirror_one_project)
+}
+
+randomize <- function(x){
+  sample(x, length(x))
 }
 
 #' @export
