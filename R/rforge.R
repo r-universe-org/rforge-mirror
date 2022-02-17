@@ -68,14 +68,14 @@ rforge_get_revision_fallback <- function(project){
 }
 
 project_need_update <- function(project){
-  if(identical(Sys.getenv('FORCEFRESH'), 'true')){
-    return(TRUE)
-  }
   rev <- rforge_get_revision(project)
   cat(sprintf("SVN revision for '%s' is %s\n", project, rev))
   if(as.character(rev) == "0"){
     try(delete_mirror(project))
     stop("This project seems empty: ", project)
+  }
+  if(identical(Sys.getenv('FORCEFRESH'), 'true')){
+    return(TRUE)
   }
   endpoint <- sprintf('/repos/r-forge/%s/commits/HEAD', project)
   message <- tryCatch(gh::gh(endpoint)$commit$message, error = function(e){""})
