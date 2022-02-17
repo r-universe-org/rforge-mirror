@@ -4,8 +4,6 @@
 \alias{rforge-mirror}
 \alias{rforge_mirror}
 \alias{rforge_find_projects}
-\alias{project name of the project (usually package)}
-\alias{rforge_get_revision}
 \alias{rforge_list_repos}
 \alias{rforge_cleanup_repos}
 \title{R-forge mirror tools}
@@ -13,8 +11,6 @@
 rforge_mirror(this_week = TRUE)
 
 rforge_find_projects(this_week = TRUE)
-
-rforge_get_revision(project)
 
 rforge_list_repos()
 
@@ -25,5 +21,5 @@ rforge_cleanup_repos()
 the past week. Set this to FALSE to mirror all repos we can find.}
 }
 \description{
-Mirrors SVN repositories to \url{https://github.com/r-forge}
+Mirrors SVN repositories to \url{https://github.com/rforge}
 }

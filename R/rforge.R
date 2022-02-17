@@ -185,8 +185,6 @@ clone_and_push <- function(project){
     unlink(git_dir, recursive = TRUE)
   })
   findauthor <- normalizePath(system.file('findauthor.sh', package = 'rforgemirror'), mustWork = TRUE)
-  on.exit(set_ignore_sigpipe(FALSE))
-  set_ignore_sigpipe(TRUE)
   res <- system2("git", c("svn", "clone", "--log-window-size=10000", paste0('--authors-prog=', findauthor),
     sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), git_dir))
   if(res != 0)
