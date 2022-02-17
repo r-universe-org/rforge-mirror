@@ -193,6 +193,8 @@ clone_and_push <- function(project){
   setwd(git_dir)
   gert::git_remote_add(sprintf('https://rforge:%s@github.com/r-forge/%s', Sys.getenv('GITHUB_PAT'), project))
   system("git push --force origin master")
+
+  # This seems to give strange "ignoring sigpipe" erros in R for certain large files?
   #gert::git_push('origin', force = TRUE, mirror = TRUE)
 }
 
