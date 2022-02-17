@@ -137,7 +137,13 @@ find_author_prog <- function(user){
     message("Scraping user details for: ", user)
     realname <- user
     url <- sprintf('https://r-forge.r-project.org/users/%s/', user)
-    doc <- xml2::read_html(url)
+    req <- curl::curl_fetch_memory(url)
+    if(req$status_code >= 400){
+      message("User does not exist on r-forge: ", user)
+      userdb[[user]] <- paste(user, "<unknown@noreply.com>")
+      return(userdb[[user]])
+    }
+    doc <- xml2::read_html(req$content)
     namenode <- xml2::xml_find_first(doc, "//span[@property='foaf:name'][1]")
     if(length(namenode) > 0){
       realname <- sprintf('%s (%s)', realname, xml2::xml_text(namenode))
