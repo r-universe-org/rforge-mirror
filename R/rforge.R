@@ -54,9 +54,10 @@ rforge_get_revision <- function(project){
   out <- sys::exec_internal('svn', c('info', url), error = FALSE)
   if(out$status > 0){
     stderr <- rawToChar(out$stderr)
-    if(grepl("db/current': Permission denied", stderr, fixed = TRUE)){
-      message("Permission denied for r-forge repo: ", project, '. Deleting.')
-      return("0")  # this is a private repo, treat same as empty
+    # weird error that indicates a private repo, treat same as empty
+    if(grepl("Permission denied", stderr, fixed = TRUE) && grepl('/var/lib/gforge/chroot', stderr, fixed = TRUE)){
+      message("Permission denied for r-forge repo: ", project)
+      return("0")
     }
     stop("Error cloning: ", project, ": ", stderr)
   }
