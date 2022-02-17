@@ -128,7 +128,7 @@ find_author_prog <- function(user){
     doc <- xml2::read_html(url)
     namenode <- xml2::xml_find_first(doc, "//span[@property='foaf:name'][1]")
     if(length(namenode) > 0){
-      realname <- sprintf('%s (%s)', xml2::xml_text(namenode), realname)
+      realname <- sprintf('%s (%s)', realname, xml2::xml_text(namenode))
     } else {
       message("Failed to find real name for r-forge user: ", user)
     }
@@ -142,6 +142,8 @@ find_author_prog <- function(user){
     }
     userdb[[user]] <- sprintf('%s <%s>', realname, email)
     saveRDS(userdb, userdbfile)
+  } else {
+    message("Found existing user details for: ", user)
   }
   return(userdb[[user]])
 }
