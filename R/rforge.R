@@ -183,6 +183,7 @@ clone_and_push <- function(project){
     stop(paste("git svn clone failed for:", project))
   setwd(git_dir)
   gert::git_remote_add(paste0('https://github.com/r-forge/', project))
+  system("git push --force origin master")
   gert::git_push('origin', force = TRUE, mirror = TRUE)
 }
 
