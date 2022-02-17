@@ -94,8 +94,9 @@ find_projects <- function(page){
 
 mirror_one_project <- function(project){
   tryCatch({
+    needs_update <- project_need_update(project) #will error in case of empty
     create_gh_repo(project)
-    if(project_need_update(project)){
+    if(needs_update){
       cat(sprintf("Starting full mirror for: %s\n", project))
       clone_and_push(project)
       'DONE'
