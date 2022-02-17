@@ -13,7 +13,7 @@ rforge_mirror <- function(this_week = TRUE){
     stop("No valid PAT found for r-forge user")
   projects <- rforge_find_projects(this_week = this_week)
   if(isFALSE(this_week)){
-    projects <- unique(c(projects, find_all_mirrors()))
+    projects <- unique(c(find_all_mirrors(), projects))
   } else {
     cranpkgs <- basename(jsonlite::fromJSON('https://raw.githubusercontent.com/r-universe-org/cran-to-git/master/r-forge.json')$url)
     projects <- unique(c(cranpkgs, projects))
