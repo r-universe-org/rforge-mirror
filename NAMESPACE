@@ -2,5 +2,7 @@
 
 export(rforge_cleanup_repos)
 export(rforge_find_projects)
+export(rforge_get_revision)
 export(rforge_list_repos)
 export(rforge_mirror)
+useDynLib(rforgemirror,C_set_ignore_sigpipe)
