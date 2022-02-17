@@ -6,6 +6,11 @@ if [ -z "$ACTION" ]; then
 ACTION="quick"
 fi
 
+if [ "${2}" ]; then
+echo "force=true - forcing updates refresh of up-to-date repos"
+export FORCEFRESH=true
+fi
+
 case $ACTION in
   quick)
     echo "Running quick R-forge mirror"

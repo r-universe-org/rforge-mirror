@@ -15,11 +15,13 @@ rforge_mirror <- function(this_week = TRUE){
   if(isFALSE(this_week)){
     projects <- unique(c(projects, find_all_mirrors()))
   } else {
-    cranpkgs <- jsonlite::fromJSON('https://raw.githubusercontent.com/r-universe-org/cran-to-git/master/r-forge.json')$package
+    cranpkgs <- basename(jsonlite::fromJSON('https://raw.githubusercontent.com/r-universe-org/cran-to-git/master/r-forge.json')$url)
     projects <- unique(c(cranpkgs, projects))
   }
   cat("Found active projects:", projects, "\n")
-  projects <- randomize(setdiff(projects, skiplist))
+  projects <- setdiff(projects, skiplist)
+  if(!nchar(Sys.getenv('FORCEFRESH')))
+    projects <- randomize(projects)
   sapply(projects, mirror_one_project)
 }
 
@@ -39,7 +41,9 @@ rforge_find_projects <- function(this_week = TRUE){
 
 find_all_mirrors <- function(){
   res <- gh::gh('/orgs/r-forge/repos', .limit = 10000)
-  vapply(res, '[[', character(1), 'name')
+  pushed <- vapply(res, '[[', character(1), 'pushed_at')
+  names <- vapply(res, '[[', character(1), 'name')
+  names[order(pushed)] # Sort from last mirrored
 }
 
 #' @export
@@ -64,6 +68,9 @@ rforge_get_revision_fallback <- function(project){
 }
 
 project_need_update <- function(project){
+  if(identical(Sys.getenv('FORCEFRESH'), 'true')){
+    return(TRUE)
+  }
   rev <- rforge_get_revision(project)
   cat(sprintf("SVN revision for '%s' is %s\n", project, rev))
   endpoint <- sprintf('/repos/r-forge/%s/commits/HEAD', project)

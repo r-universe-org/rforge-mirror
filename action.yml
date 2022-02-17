@@ -4,8 +4,12 @@ inputs:
   action:
     description: One of quick, full or cleanup, or a package name
     default: quick
+  force:
+    description: Force a refresh even if repo is up-to-date
+
 runs:
   using: docker
   image: docker://ghcr.io/r-universe-org/rforge-mirror
   args:
     - ${{ inputs.action }}
+    - ${{ inputs.force }}
