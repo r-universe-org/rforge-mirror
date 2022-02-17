@@ -73,6 +73,10 @@ project_need_update <- function(project){
   }
   rev <- rforge_get_revision(project)
   cat(sprintf("SVN revision for '%s' is %s\n", project, rev))
+  if(as.character(rev) == "0"){
+    try(delete_mirror(project))
+    stop("This project seems empty: ", project)
+  }
   endpoint <- sprintf('/repos/r-forge/%s/commits/HEAD', project)
   message <- tryCatch(gh::gh(endpoint)$commit$message, error = function(e){""})
   svn_id <- utils::tail(strsplit(message, '\n')[[1]], 1)
@@ -188,11 +192,13 @@ rforge_cleanup_repos <- function(){
   dead <- repos[which(status == 404)]
   cat("Found dead repositories:", dead, "\n")
   skipped <- intersect(repos, skiplist)
-  lapply(c(dead, skipped), function(project){
-    endpoint <- paste0("/repos/r-forge/", project)
-    gh::gh(endpoint, .method = 'DELETE')
-    cat("DELETED", project, "\n")
-  })
+  lapply(c(dead, skipped), delete_mirror)
+}
+
+delete_mirror <- function(project){
+  endpoint <- paste0("/repos/r-forge/", project)
+  gh::gh(endpoint, .method = 'DELETE')
+  cat("DELETED", project, "\n")
 }
 
 rforge_project_status <- function(projects){
