@@ -114,6 +114,39 @@ create_gh_repo <- function(project){
   })
 }
 
+find_author_prog <- function(user){
+  userdbfile <- '~/authors.rds'
+  userdb <- if(file.exists(userdbfile)){
+    readRDS(userdbfile)
+  } else {
+    list()
+  }
+  if(!length(userdb[[user]])){
+    message("Scraping user details for: ", user)
+    realname <- user
+    url <- sprintf('https://r-forge.r-project.org/users/%s/', user)
+    doc <- xml2::read_html(url)
+    namenode <- xml2::xml_find_first(doc, "//span[@property='foaf:name'][1]")
+    if(length(namenode) > 0){
+      realname <- sprintf('%s (%s)', xml2::xml_text(namenode), realname)
+    } else {
+      message("Failed to find real name for r-forge user: ", user)
+    }
+    mailnode <- xml2::xml_find_first(doc, "//a[contains(@href,'sendmessage.php')][1]")
+    nodetext <- xml2::xml_text(mailnode)
+    email <- if(length(mailnode) > 0 && grepl('nospam', nodetext)){
+      sub('\\s*@nospam@\\s*', '@', nodetext)
+    } else {
+      message("Failed to find email address for r-forge user: ", user)
+      "unknown@noreply.com"
+    }
+    userdb[[user]] <- sprintf('%s <%s>', realname, email)
+    saveRDS(userdb, userdbfile)
+  }
+  return(userdb[[user]])
+}
+
+
 clone_and_push <- function(project){
   old_dir <- getwd()
   git_dir <- file.path(tempdir(), project)
@@ -121,7 +154,8 @@ clone_and_push <- function(project){
     setwd(old_dir)
     unlink(git_dir, recursive = TRUE)
   })
-  res <- system2("git", c("svn", "clone", "--log-window-size=10000",
+  findauthor <- normalizePath(system.file('findauthor.sh', package = 'rforgemirror'), mustWork = TRUE)
+  res <- system2("git", c("svn", "clone", "--log-window-size=10000", paste0('--authors-prog=', findauthor),
     sprintf("svn://svn.r-forge.r-project.org/svnroot/%s", project), git_dir))
   if(res != 0)
     stop(paste("git svn clone failed for:", project))
