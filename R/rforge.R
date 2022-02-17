@@ -59,6 +59,10 @@ rforge_get_revision <- function(project){
       message("Permission denied for r-forge repo: ", project)
       return("0")
     }
+    if(grepl("No repository found", stderr, fixed = TRUE)){
+      message("Project deleted from r-forge: ", project)
+      return("0")
+    }
     stop("Error cloning: ", project, ": ", stderr)
   }
   con <- rawConnection(out$stdout)
@@ -248,4 +252,5 @@ skiplist <-
     "open-tfdea", "optbiomarker", "patchwork", "pmoments", "polyploid",
     "ptauxpc", "rftestproject12", "r-survey", "seqinr", "sprint",
     "teatime", "toxcast", "trajectory-sim", "treevo", "tuner", "waveslim",
-    "wavetiling", "hyperspec", "partykit", "a2a", "dptee", "fntd", "gecon")
+    "wavetiling", "hyperspec", "partykit", "a2a", "dptee", "fntd", "gecon",
+    "pdnimblegen")
