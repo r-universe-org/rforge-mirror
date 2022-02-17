@@ -136,7 +136,7 @@ find_author_prog <- function(user){
   if(!length(userdb[[user]])){
     message("Scraping user details for: ", user)
     realname <- user
-    url <- sprintf('https://r-forge.r-project.org/users/%s/', user)
+    url <- sprintf('https://r-forge.r-project.org/users/%s/', curl::curl_escape(user))
     req <- curl::curl_fetch_memory(url)
     if(req$status_code >= 400){
       message("User does not exist on r-forge: ", user)
