@@ -50,7 +50,16 @@ find_all_mirrors <- function(){
 #' @rdname rforge
 #' @name project name of the project (usually package)
 rforge_get_revision <- function(project){
-  out <- sys::exec_internal('svn', c('info', paste0('svn://svn.r-forge.r-project.org/svnroot/', project)))
+  url <- paste0('svn://svn.r-forge.r-project.org/svnroot/', project)
+  out <- sys::exec_internal('svn', c('info', url), error = FALSE)
+  if(out$status > 0){
+    stderr <- rawToChar(out$stderr)
+    if(grepl('Permission denied', stderr, fixed = TRUE)){
+      message("Permission denied for r-forge repo: ", project, '. Deleting.')
+      return("0")  # this is a private repo, treat same as empty
+    }
+    stop("Error cloning: ", project, ": ", stderr)
+  }
   con <- rawConnection(out$stdout)
   on.exit(close(con))
   df <- as.data.frame(read.dcf(con))
