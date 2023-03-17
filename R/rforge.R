@@ -216,9 +216,12 @@ rforge_cleanup_repos <- function(){
   dead <- repos[which(status == 404)]
   cat("Found dead repositories:", dead, "\n")
   skipped <- intersect(repos, skiplist)
-
+  todelete <- c(dead, skipped)
+  if(length(todelete) > 5){
+    stop("More than 5 repos seem to be deleted. Something may be wrong.")
+  }
   # 2023 skip deleting for now because r-forge seems to be missing things
-  #lapply(c(dead, skipped), delete_mirror)
+  #lapply(todelete, delete_mirror)
 }
 
 delete_mirror <- function(project){
