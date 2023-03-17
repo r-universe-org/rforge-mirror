@@ -85,7 +85,7 @@ project_need_update <- function(project){
   rev <- rforge_get_revision(project)
   cat(sprintf("SVN revision for '%s' is %s\n", project, rev))
   if(as.character(rev) == "0"){
-    try(delete_mirror(project))
+    #try(delete_mirror(project))
     stop("This project seems unavailable or empty: ", project)
   }
   if(identical(Sys.getenv('FORCEFRESH'), 'true')){
