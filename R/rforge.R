@@ -199,7 +199,9 @@ clone_and_push <- function(project){
     message("Successfully mirrored: ", project)
   } else {
     message("Failure pushing: ", project, '. Trying to remove big files with BFG...')
+    system('git gc')
     system(paste('java -jar /bfg.jar --strip-blobs-bigger-than 100M', git_dir))
+    system('git reflog expire --expire=now --all && git gc --prune=now --aggressive')
     if(system("git push --force origin master") != 0){
       message('Failed to push: ', project)
     }
