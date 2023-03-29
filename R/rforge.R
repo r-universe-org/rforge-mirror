@@ -201,7 +201,9 @@ clone_and_push <- function(project){
     message("Failure pushing: ", project, '. Trying to remove big files with BFG...')
     system('find ./ -type f -size +50000 -delete')
     gert::git_add('.')
-    if(nrow(gert::git_status(staged = TRUE)) > 0){
+    status <- gert::git_status(staged = TRUE)
+    if(nrow(status) > 0){
+      print(status)
       system('git config --global user.email "dummy@dummy.org"')
       system('git config --global user.name "Dummy"')
       system('git commit --amend --no-edit')
