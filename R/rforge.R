@@ -255,14 +255,13 @@ rforge_project_status <- function(projects){
 # These fail for whatever reason.
 # Usually either disabled on r-forge or has files bigger than 100MB
 skiplist <-
-  c("adrminer", "arules", "bayessdeevol", "bbmm-analysis", "biocep-distrib",
-    "casper", "dcgor", "dnet", "dtrees2", "dtw", "estimators4nfi",
-    "flr", "fpt", "fxregime", "gamboostlss", "genabel", "gsdesign",
-    "gsif", "gsmoothr", "gwidgets", "hmmr", "htda", "ihelp", "ipeglim",
-    "jmr", "laicpms", "metasem", "mmsa", "morgan-rtools", "mpdir",
-    "msgl", "multivarseg", "nem", "neuroim", "oem", "omearalab",
+  c("adrminer", "arules", "bayessdeevol", "biocep-distrib",
+    "dtrees2", "dtw", "estimators4nfi",
+    "fpt", "fxregime", "gamboostlss",
+    "hmmr", "ipeglim",
+    "jmr", "laicpms", "metasem", "mpdir",
+    "multivarseg", "nem", "oem",
     "open-tfdea", "optbiomarker", "patchwork", "pmoments", "polyploid",
-    "ptauxpc", "rftestproject12", "r-survey", "seqinr", "sprint",
-    "teatime", "toxcast", "trajectory-sim", "treevo", "tuner", "waveslim",
-    "wavetiling", "hyperspec", "partykit", "a2a", "dptee", "fntd", "gecon",
-    "pdnimblegen")
+    "ptauxpc", "rftestproject12",
+    "teatime", "toxcast", "tuner",
+    "a2a", "dptee", "fntd", "gecon")
