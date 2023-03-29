@@ -199,10 +199,12 @@ clone_and_push <- function(project){
     message("Successfully mirrored: ", project)
   } else {
     message("Failure pushing: ", project, '. Trying to remove big files with BFG...')
-    system('find ./ -type f -size +50M -delete')
+    system('find ./ -type f -size +50000 -delete')
     gert::git_add('.')
     if(nrow(gert::git_status(staged = TRUE)) > 0){
-      system('git commit -a --amend --no-edit')
+      system('git config --global user.email "dummy@dummy.org"')
+      system('git config --global user.name "Dummy"')
+      system('git commit --amend --no-edit')
     }
     system('git gc')
     system(paste('java -jar /bfg.jar --strip-blobs-bigger-than 50M', git_dir))
