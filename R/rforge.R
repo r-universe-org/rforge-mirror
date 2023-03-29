@@ -199,10 +199,10 @@ clone_and_push <- function(project){
     message("Successfully mirrored: ", project)
   } else {
     message("Failure pushing: ", project, '. Trying to remove big files with BFG...')
-    system('find ./ -type f -size +100M -delete')
+    system('find ./ -type f -size +50M -delete')
     system('git commit -a --amend --no-edit')
     system('git gc')
-    system(paste('java -jar /bfg.jar --strip-blobs-bigger-than 100M', git_dir))
+    system(paste('java -jar /bfg.jar --strip-blobs-bigger-than 50M', git_dir))
     system('git reflog expire --expire=now --all && git gc --prune=now --aggressive')
     if(system("git push --force origin master") != 0){
       message('Failed to push: ', project)
