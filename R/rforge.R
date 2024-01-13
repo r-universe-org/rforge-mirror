@@ -199,7 +199,7 @@ clone_and_push <- function(project){
     message("Successfully mirrored: ", project)
   } else {
     message("Failure pushing: ", project, '. Trying to remove big files with BFG...')
-    system('find ./ -type f -size +50000 -delete')
+    system('find ./* -type f -size +50000 -delete')
     gert::git_add('.')
     status <- gert::git_status(staged = TRUE)
     if(nrow(status) > 0){
